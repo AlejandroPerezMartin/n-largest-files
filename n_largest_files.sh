@@ -75,20 +75,15 @@ if [[ $# -eq 0 ]]; then
     find . -type f -print0 | du -a"$outputFormat" --files0-from - | sort -nr | head -$lines | sort -"$outputSort"
 else
     touch "$temporaryFile"
-
     if [[ -e "$temporaryFile" ]]; then
-
         for directory in "$@"; do
-
             if [[ -d "$directory" ]]; then
                 # Stores the 10 largest files of each folder in a temporary file
                 find "$directory" -type f -print0 | du -a"$outputFormat" --files0-from - | sort -nr | head -$lines >> /tmp/temporarylist
             else
                 echo "Directory '$directory' not exists."
             fi
-
         done
-
         sort -"$outputSort" "$temporaryFile" | head -$lines
         rm -f "$temporaryFile" && exit 0
     else
