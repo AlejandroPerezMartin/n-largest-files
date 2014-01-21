@@ -6,7 +6,6 @@
 # Dec 21, 2013
 ####################################################
 
-
 ##### Variables #####
 lines=10
 help=false
@@ -15,17 +14,16 @@ outputFormat="b"
 outputSort="nr"
 temporaryFile="/tmp/temporarylist"
 
-
 ##### Functions #####
 error_msg() {
-    echo "buscagordos: Missing arguments"
-    echo "buscagordos: Syntax: 'buscagordos -[OPTIONS] [DIRECTORY] ... [DIRECTORY N]'"
-    echo "buscagordos: Run 'buscagordos --help' for more options"
+    echo "n_largest_files: Missing arguments"
+    echo "n_largest_files: Syntax: 'n_largest_files -[OPTIONS] [DIRECTORY] ... [DIRECTORY N]'"
+    echo "n_largest_files: Run 'n_largest_files --help' for more options"
     exit 1
 }
 
 show_help() {
-    printf "\nUsage: buscagordos [OPTION] ... [DIRECTORY] ...
+    printf "\nUsage: n_largest_files [OPTION] ... [DIRECTORY] ...
 
 Displays the N largest files in the specified folder/s.
 
@@ -45,25 +43,24 @@ Mandatory arguments to long options are mandatory for short options too.
                 if not specified, display from largest to shortest
 
 Example of use:
-    buscagordos -[n number, b, k, m, s] directory ... directory_n\n\n"
+    n_largest_files -[n number, b, k, m, s] directory ... directory_n\n\n"
     exit 0
 }
-
 
 ##### Options #####
 while getopts ":n:bkms(sort):h(help)H(human)" option
 do
     case $option in
         n)  lines=$OPTARG ;;
-        :)  echo "buscagordos: Option -$OPTARG needs an argument" ;;
+        :)  echo "n_largest_files: Option -$OPTARG needs an argument" ;;
         h)  show_help ;;
         H)  human=true ;;
         b)  outputFormat="b" ;;
         k)  outputFormat="k" ;;
         m)  outputFormat="m" ;;
         s)  outputSort="n" ;;
-        *)  echo "buscagordos: invalid option '-$OPTARG'"
-            echo "Try 'buscagordos --help' for more information."
+        *)  echo "n_largest_files: invalid option '-$OPTARG'"
+            echo "Try 'n_largest_files --help' for more information."
             return 1 ;;
     esac
 
@@ -73,20 +70,25 @@ done
 
 shift $(( OPTIND - 1 ))
 
-
-##### Search #####
+##### Files Search #####
 if [[ $# -eq 0 ]]; then
-    du -a"$outputFormat" | sort -"$outputSort"
+    find . -type f -print0 | du -a"$outputFormat" --files0-from - | sort -nr | head -$lines | sort -"$outputSort"
 else
     touch "$temporaryFile"
+
     if [[ -e "$temporaryFile" ]]; then
+
         for directory in "$@"; do
+
             if [[ -d "$directory" ]]; then
-                du -a"$outputFormat" "$directory" | sort -"$outputSort" | head -$lines >> "$temporaryFile"
+                # Stores the 10 largest files of each folder in a temporary file
+                find "$directory" -type f -print0 | du -a"$outputFormat" --files0-from - | sort -nr | head -$lines >> /tmp/temporarylist
             else
                 echo "Directory '$directory' not exists."
             fi
+
         done
+
         sort -"$outputSort" "$temporaryFile" | head -$lines
         rm -f "$temporaryFile" && exit 0
     else
