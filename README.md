@@ -4,7 +4,7 @@ N-Largest-Files
 KSH Script that finds the N largest files in the given folders.
 
 To execute this script you must change file permissions by typing this in your console:
-  sudo chmod 777 n_largest_files.sh 
+  > sudo chmod 777 n_largest_files.sh 
 You can give other permissions (766, 644, etc).
 
 After that, let's execute the script by typing this:
