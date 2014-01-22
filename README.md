@@ -1,7 +1,7 @@
 N-Largest-Files
 ===============
 
-*KSH Script that finds the N largest files in the given folders.*
+**KSH Script that finds the N largest files in the given folders.**
 
 To execute this script you must change file permissions by typing this in your console:
   > sudo chmod 777 n_largest_files.sh 
@@ -18,9 +18,9 @@ Example:
 
 To find the largest files contained in a directory (or more than one):
 
-  > n_largest_files.sh -5 folder1 folder2
+  > n_largest_files.sh -5 folder1 .. folderN
 
 There are more options such as show results in 'Human readable numbers', Bytes, Kilobytes and Megabytes, or sort in order.
 To make use of this, run this command
 
-  > n_largest_files.sh -3 -X _# Where X should be replaced with (h:human, b:bytes, k:KB, m:MB, s:sort)_
+  > n_largest_files.sh -3 -X folder1 .. folderN _# Where X should be replaced with (h:human, b:bytes, k:KB, m:MB, s:sort)_
