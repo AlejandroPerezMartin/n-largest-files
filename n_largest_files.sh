@@ -43,7 +43,7 @@ Mandatory arguments to long options are mandatory for short options too.
                 if not specified, display from largest to shortest
 
 Example of use:
-    n_largest_files -[n number, b, k, m, s] directory ... directory_n\n\n"
+    n_largest_files -[NUM, b, k, m, H, s] directory ... directory_n\n\n"
     exit 0
 }
 
@@ -74,6 +74,11 @@ do
 done
 
 shift $(( OPTIND - 1 ))
+
+
+# Error message
+[[ $# -lt 1 ]] && error_msg
+
 
 ##### Files Search #####
 if [[ $# -eq 0 ]]; then
