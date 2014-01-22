@@ -37,8 +37,8 @@ Mandatory arguments to long options are mandatory for short options too.
   -b            display results in Bytes (B)
   -k            display results in Kilobytes (KB)
   -m            display results in Megabytes (MB)
-  -n NUM        output the NUM largest files, if omitted,
-                default value 10 is taken
+  -NUM          output the NUM largest files (should be greater than 0),
+                if omitted, default value 10 is taken
   -s, --sort    display results from shortest to largest,
                 if not specified, display from largest to shortest
 
@@ -48,20 +48,25 @@ Example of use:
 }
 
 ##### Options #####
-while getopts ":n:bkms(sort):h(help)H(human)" option
+while getopts ":bkms(sort):h(help)H(human)" option
 do
     case $option in
-        n)  lines=$OPTARG ;;
-        :)  echo "n_largest_files: Option -$OPTARG needs an argument" ;;
         h)  show_help ;;
         H)  human=true ;;
         b)  outputFormat="b" ;;
         k)  outputFormat="k" ;;
         m)  outputFormat="m" ;;
         s)  outputSort="n" ;;
-        *)  echo "n_largest_files: invalid option '-$OPTARG'"
-            echo "Try 'n_largest_files --help' for more information."
-            return 1 ;;
+        *)  if [[ ( -n $OPTARG ) && ( $OPTARG -gt 0 ) ]]; then
+                lines=$OPTARG
+            elif [[ $OPTARG -lt 1 ]]; then
+                echo "(ERROR): You must enter a value greater than 0."
+                exit 1
+            else
+                echo "n_largest_files: invalid option '-$OPTARG'"
+                echo "Try 'n_largest_files --help' for more information."
+                return 1
+            fi ;;
     esac
 
     [[ $human = true ]] && outputFormat="$outputFormat""h"
