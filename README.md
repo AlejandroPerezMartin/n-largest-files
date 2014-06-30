@@ -6,7 +6,7 @@ N-Largest-Files
 - To execute this script you must change file permissions by typing this in your console:
 
 ```shell
-sudo chmod 777 n_largest_files.sh
+sudo chmod +x n_largest_files.sh
 ```
 
 You can give other permissions (766, 644, etc).
