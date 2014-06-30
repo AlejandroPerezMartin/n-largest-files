@@ -76,10 +76,6 @@ done
 shift $(( OPTIND - 1 ))
 
 
-# Error message
-[[ $# -lt 1 ]] && error_msg
-
-
 ##### Files Search #####
 if [[ $# -eq 0 ]]; then
     find . -type f -print0 | du -a"$outputFormat" --files0-from - | sort -nr | head -$lines | sort -"$outputSort"
